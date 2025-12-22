@@ -14,6 +14,11 @@ type Config struct {
 type AppConfig struct {
 	Name string `yaml:"name"`
 	Port string `yaml:"port"`
+	Encryption EncryptionConfig `yaml:"encryption"`
+}
+
+type EncryptionConfig struct {
+	Salt uint8 `yaml:"salt"`
 }
 
 type DBConfig struct {
@@ -24,6 +29,7 @@ type DBConfig struct {
 	Name           string                 `yaml:"name"`
 	ConnectionPool DBConnectionPoolConfig `yaml:"connection_pool"`
 }
+
 
 type DBConnectionPoolConfig struct {
 	MaxIdleConnection     uint8 `yaml:"max_idle_connection"`

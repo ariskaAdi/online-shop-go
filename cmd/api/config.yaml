@@ -1,6 +1,8 @@
 app:
   name: ariskaAdi-online-shop
   port: 4000
+  encryption:
+    salt: 10
 
 db:
   host: localhost
