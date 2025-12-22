@@ -1,0 +1,15 @@
+app:
+  name: ariskaAdi-online-shop
+  port: 4000
+
+db:
+  host: localhost
+  port: 5432
+  name: online-shop
+  user: postgres
+  password: postgres
+  connection_pool:
+    max_idle_connection: 10
+    max_open_connection: 30
+    max_lifetime_connection: 60 #second
+    max_idle_time_connection: 60 #second
