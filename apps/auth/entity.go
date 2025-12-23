@@ -2,9 +2,11 @@ package auth
 
 import (
 	"ariskaAdi-online-shop/infra/response"
+	"ariskaAdi-online-shop/utils"
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -19,6 +21,7 @@ type AuthEntity struct {
 	Id       int `db:"id"`
 	Name     string `db:"name"`
 	Email    string `db:"email"`
+	PublicId uuid.UUID `db:"public_id"`
 	Password string `db:"password"`
 	Role     Role   `db:"role"`
 	CreatedAt time.Time `db:"created_at"`
@@ -30,10 +33,18 @@ func NewFormRegisterRequest(req RegisterRequestPayload) AuthEntity {
 	return AuthEntity{
 		Name: req.Name,
 		Email: req.Email,
+		PublicId: uuid.New(),
 		Password: req.Password,
 		Role: ROLE_User,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
+	}
+}
+
+func NewFormLoginRequest(req LoginRequestPayload) AuthEntity {
+	return AuthEntity{
+		Email: req.Email,
+		Password: req.Password,
 	}
 }
 
@@ -83,3 +94,15 @@ func (a *AuthEntity) EncryptPassword(sal int) (err error) {
 	a.Password = string(encryptedPass)
 	return nil
 } 
+
+func (a AuthEntity) VerifyPasswordFromEncrypted(plain string) (err error) {
+	return bcrypt.CompareHashAndPassword([]byte(a.Password), []byte(plain))
+}
+
+func (a AuthEntity) VerifyPasswordFromPlain(encrypted string) (err error) {
+	return bcrypt.CompareHashAndPassword([]byte(encrypted), []byte(a.Password))
+}
+
+func (a AuthEntity) GenerateToken(secret string) (tokenString string, err error) {
+	return utils.GenerateToken(a.PublicId.String(), string(a.Role), secret)
+}

@@ -1,9 +1,12 @@
 package main
 
 import (
+	"ariskaAdi-online-shop/apps/auth"
 	"ariskaAdi-online-shop/external/database"
 	"ariskaAdi-online-shop/internal/config"
 	"log"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 func main() {
@@ -21,4 +24,12 @@ func main() {
 		log.Println("DB CONNECTED")
 	}
 
+	router := fiber.New(fiber.Config{
+		Prefork: true,
+		AppName: config.Cfg.App.Name,
+	})
+
+	auth.Init(router, db)
+
+	router.Listen(":" + config.Cfg.App.Port)
 }
