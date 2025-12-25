@@ -25,6 +25,7 @@ func (h handler) register(ctx *fiber.Ctx) error {
 			infrafiber.WithMessage(err.Error()),
 			infrafiber.WithError(myErr),
 			infrafiber.WithHttpCode(http.StatusBadRequest),
+			infrafiber.WithMessage("register failed"),
 		).Send(ctx)
 	}
 
@@ -36,12 +37,12 @@ func (h handler) register(ctx *fiber.Ctx) error {
 		return infrafiber.NewResponse(
 			infrafiber.WithMessage(err.Error()),
 			infrafiber.WithError(myErr),
-			infrafiber.WithHttpCode(http.StatusBadRequest),
 		).Send(ctx)
 	}
 
 	return infrafiber.NewResponse(
 		infrafiber.WithHttpCode(http.StatusCreated),
+		infrafiber.WithMessage("register success"),
 	).Send(ctx)
 }
 
@@ -53,7 +54,7 @@ func (h handler) login(ctx *fiber.Ctx) error {
 		return infrafiber.NewResponse(
 			infrafiber.WithMessage(err.Error()),
 			infrafiber.WithError(myErr),
-			infrafiber.WithHttpCode(http.StatusBadRequest),
+			infrafiber.WithMessage("login failed"),
 		).Send(ctx)
 	}
 
@@ -66,7 +67,6 @@ func (h handler) login(ctx *fiber.Ctx) error {
 		return infrafiber.NewResponse(
 			infrafiber.WithMessage(err.Error()),
 			infrafiber.WithError(myErr),
-			infrafiber.WithHttpCode(http.StatusBadRequest),
 		).Send(ctx)
 	}
 
@@ -75,5 +75,6 @@ func (h handler) login(ctx *fiber.Ctx) error {
 		infrafiber.WithPayload(map[string]interface{}{
 			"access_token": token,
 		}),
+		infrafiber.WithMessage("login success"),
 	).Send(ctx)
 }

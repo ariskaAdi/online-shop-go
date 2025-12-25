@@ -10,9 +10,9 @@ type Response struct {
 	HttpCode  int         `json:"-"`
 	Success   bool        `json:"success"`
 	Message   string      `json:"message"`
-	Payload   interface{} `json:"payload",omitempty`
-	Error     string      `json:"error",omitempty`
-	ErrorCode string      `json:"error_code",omitempty`
+	Payload   interface{} `json:"payload,omitempty"`
+	Error     string      `json:"error,omitempty"`
+	ErrorCode string      `json:"error_code,omitempty"`
 }
 
 func NewResponse(params ...func(*Response) *Response) Response {
@@ -58,6 +58,7 @@ func WithError(err error) func(*Response) *Response {
 
 		r.Error = myErr.Message
 		r.ErrorCode = myErr.Code
+		r.HttpCode = myErr.HttpCode
 		return r
 	}
 }
