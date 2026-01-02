@@ -58,3 +58,21 @@ func (r repository) GetAllProductPagination(ctx context.Context, model ProductPa
 	}
 	return	
 }
+
+func (r repository) GetProductBySKU(ctx context.Context, sku string) (product ProductEntity, err error) {
+	query := `
+		SELECT id, sku, name, stock, price, created_at, updated_at
+		FROM products
+		WHERE sku = $1
+	`
+	err = r.db.GetContext(ctx, &product, query, sku)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			err = response.ErrNotFound
+			return
+		}
+		return
+	}
+
+	return
+}

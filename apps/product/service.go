@@ -8,6 +8,7 @@ import (
 type Repository interface{
 	CreateProduct(ctx context.Context, model ProductEntity) (err error)
 	GetAllProductPagination(ctx context.Context, model ProductPaginationEntity) (products []ProductEntity, err error)
+	GetProductBySKU(ctx context.Context, sku string) (product ProductEntity, err error)
 }
 
 type service struct {
@@ -46,6 +47,14 @@ func (s service) ListProduct(ctx context.Context, req ListProductRequestPayload)
 
 	if len(product) == 0 {
 		return []ProductEntity{}, nil
+	}
+	return
+}
+
+func (s service) GetPoductDetail(ctx context.Context, sku string) (model ProductEntity, err error) {
+	model, err = s.repo.GetProductBySKU(ctx, sku)
+	if err != nil {
+		return
 	}
 	return
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"ariskaAdi-online-shop/apps/auth"
+	"ariskaAdi-online-shop/apps/product"
 	"ariskaAdi-online-shop/external/database"
 	"ariskaAdi-online-shop/internal/config"
 	"log"
@@ -30,6 +31,7 @@ func main() {
 	})
 
 	auth.Init(router, db)
+	product.Init(router, db)
 
 	router.Listen(":" + config.Cfg.App.Port)
 }

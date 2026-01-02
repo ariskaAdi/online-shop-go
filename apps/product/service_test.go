@@ -47,3 +47,31 @@ func TestGetAllProduct_success(t *testing.T) {
 	require.NotNil(t, products)
 	log.Printf("%+v", products)
 }
+
+func TestGetProductDetail_success(t *testing.T) {
+	req := CreateProductRequestPayload{
+		Name: "celana baru",
+		Stock: 10,
+		Price: 100_000,
+	}
+
+	ctx := context.Background()
+
+	err := svc.CreateProduct(ctx, req)
+	require.Nil(t, err)
+
+	products, err := svc.ListProduct(ctx, ListProductRequestPayload{
+		Cursor: 0,
+		Size: 10,
+	})
+
+	require.Nil(t, err)
+	require.NotNil(t, products)
+	require.Greater(t, len(products), 0)
+
+	product, err := svc.GetPoductDetail(ctx, products[0].SKU)
+	require.Nil(t, err)
+	require.NotNil(t, product)
+
+	log.Printf("%+v", product)
+}
